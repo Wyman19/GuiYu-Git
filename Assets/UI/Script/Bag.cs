@@ -9,6 +9,7 @@ public class Bag : BasePanel
     public static bool _isPause;
     public inventorymanager Packet_Left;
     public inventorymanager Packet_Right;
+    public inventorymanager Packet_Armor;
     public inventorymanager MyBag;
     private void Start()
     {
@@ -26,6 +27,8 @@ public class Bag : BasePanel
         base.OnEnter();
         Packet_Left.RefreshItemInPacker();
         Packet_Right.RefreshItemInPacker();
+        Packet_Armor.RefreshItemInArmor();
+        MyBag.RefreshItem();
         _isPause = true;
 
     }
@@ -34,6 +37,7 @@ public class Bag : BasePanel
         base.OnExit();
         Packet_Left.SaveBag_Packet();
         Packet_Right.SaveBag_Packet();
+        Packet_Armor.SaveBag_Armor();
         MyBag.SaveBag();
         _isPause = false;
     }

@@ -9,10 +9,10 @@ public class Item : ScriptableObject
     //一个物品的属性
     public int id;
     public string itemName;
-    public float itemHeld;
     public Sprite itemImage;
     [TextArea]
     public string itemInfo;
+    public ArmorType armorType;
     
 
  

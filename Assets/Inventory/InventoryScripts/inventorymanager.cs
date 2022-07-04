@@ -6,12 +6,11 @@ using UnityEngine.UI;
 public class inventorymanager : MonoBehaviour
 {
     public inventory bag;
-    public GameObject slotGrid;
-    public slot slotPrefab;
+    public GameObject slotPrefab;
     public Text itemInformantion;
     public List<slot> slots=new List<slot>();
 
-    private void Start()
+    private void Awake()
     {
         GetSlot();
     }
@@ -24,15 +23,9 @@ public class inventorymanager : MonoBehaviour
         }
         
     }
-    public void CreateNewItem(Item item)
+    public void AddSlot(int AddNum)
     {
-        //新建一个slot用来装item的
-        slot newItem = Instantiate(slotPrefab, slotGrid.transform.position, Quaternion.identity);
-        newItem.gameObject.transform.SetParent(slotGrid.transform);
-        //把item的值给slot，就能显示出来了
-        newItem.slotItem = item;
-        newItem.slotImage.sprite = item.itemImage;
-        //newItem.slotNum.text = item.itemHeld.ToString();
+
     }
     public void CreateNewItemInPacker(int packetNum, int index)
     {
@@ -48,18 +41,44 @@ public class inventorymanager : MonoBehaviour
     /// </summary>
     public void RefreshItem()
     {
-        for (int i = 0; i < slotGrid.transform.childCount; i++)
+        //GetSlot();
+        for (int i = 0; i < slots.Count; i++)
         {
-            if (slotGrid.transform.childCount == 0)
-                break;
-            //删除所有物品
-            Destroy(slotGrid.transform.GetChild(i).gameObject);
+            //删除物品
 
+            slots[i].slotItem = null;
+            slots[i].slotGameObject = null;
+            slots[i].slotCopyGameObject = null;
+            slots[i].slotImage.sprite = null;
+
+            if (bag.itemList[i] != null)
+            {
+                slots[i].slotItem = bag.itemList[i];
+                slots[i].slotGameObject = bag.gameObjects[i];
+                slots[i].slotCopyGameObject = bag.copyGameObjects[i];
+                slots[i].slotImage.sprite = bag.itemList[i].itemImage;
+            }
         }
-        foreach (Item value in bag.itemList)
+
+    }
+    public void RefreshItemInArmor()
+    {
+        for (int i = 0; i < slots.Count; i++)
         {
-            //遍历字典+生成
-            CreateNewItem(value);
+            //删除物品
+
+            slots[i].slotItem = null;
+            slots[i].slotGameObject = null;
+            slots[i].slotCopyGameObject = null;
+            slots[i].slotImage.sprite = null;
+
+            if (bag.itemList[i] != null)
+            {
+                slots[i].slotItem = bag.itemList[i];
+                slots[i].slotGameObject = bag.gameObjects[i];
+                slots[i].slotCopyGameObject = bag.copyGameObjects[i];
+                slots[i].slotImage.sprite = bag.itemList[i].itemImage;
+            }
         }
     }
     /// <summary>
@@ -119,11 +138,11 @@ public class inventorymanager : MonoBehaviour
         //把放到背包的物品隐藏
         for (int i = 0; i < slots.Count; i++)
         {
-            if (slots[i].slotGameObject != null)
-            {
-                slots[i].slotGameObject.SetActive(false);
-                slots[i].slotCopyGameObject.SetActive(false);
-            } 
+            if(slots[i].slotGameObject != null)
+            slots[i].slotGameObject.SetActive(false);
+            if(slots[i].slotCopyGameObject != null)
+            slots[i].slotCopyGameObject.SetActive(false);
+            
             //把数据放入inventory
             bag.gameObjects[i] = slots[i].slotGameObject;
             bag.itemList[i] = slots[i].slotItem;
@@ -131,5 +150,22 @@ public class inventorymanager : MonoBehaviour
         }
         
         //slots.ForEach(slot =>slot.slotGameObject?.SetActive(false));
+    }
+    public void SaveBag_Armor()
+    {
+        for (int i = 0; i < slots.Count; i++)
+        {
+            //隐藏手的物品
+            if (slots[i].slotGameObject != null)
+                slots[i].slotGameObject.SetActive(false);
+            if (slots[i].slotCopyGameObject != null)
+                slots[i].slotCopyGameObject.SetActive(false);
+            //在身上显示装备
+
+            //把数据放入inventory
+            bag.gameObjects[i] = slots[i].slotGameObject;
+            bag.itemList[i] = slots[i].slotItem;
+            bag.copyGameObjects[i] = slots[i].slotCopyGameObject;
+        }
     }
 }
