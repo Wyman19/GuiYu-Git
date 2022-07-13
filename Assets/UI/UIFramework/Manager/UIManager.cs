@@ -49,6 +49,10 @@ public class UIManager
 
     //栈储存当前页面的面板
     private Stack<BasePanel> panelStack;
+    public void InitializePanelStack()
+    {
+        panelStack.Clear();
+    }
     public void PopAllPanel()
     {
         if(panelStack.Count > 0)

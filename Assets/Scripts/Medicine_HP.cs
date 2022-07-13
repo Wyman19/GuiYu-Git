@@ -14,6 +14,7 @@ public class Medicine_HP : MonoBehaviour
 
     private void Awake()
     {
+        userHp = PlayerHP.Instance;
         residueDegree = maxDegree;
     }
     private void Start()

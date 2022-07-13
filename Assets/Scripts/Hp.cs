@@ -27,7 +27,7 @@ public class Hp : MonoBehaviour
     }
     private void Update()
     {
-        time +=Time.deltaTime;
+        if(time<1)time +=Time.deltaTime;
     }
 
     public void GetDamage(float damage )

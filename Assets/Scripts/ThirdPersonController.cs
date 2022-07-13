@@ -8,14 +8,15 @@ using UnityEngine.InputSystem;
 /* Note: animations are called via the controller for both the character and capsule using animator null checks
  */
 
-namespace StarterAssets
-{
+
 	[RequireComponent(typeof(CharacterController))]
 #if ENABLE_INPUT_SYSTEM 
 	[RequireComponent(typeof(PlayerInput))]
 #endif
 	public class ThirdPersonController : MonoBehaviour
 	{
+
+		public static ThirdPersonController Instance { get; private set; }
 
 		[Header("Player")]
 		[Tooltip("Move speed of the character in m/s")]
@@ -113,13 +114,19 @@ namespace StarterAssets
 		[Header("Bag")]
 		public  inventory _playerBag_Left;
 		public  inventory _playerBag_Right;
+		public inventory _playerBag_Armor;
 		public int PacketNum_L;
 		public int PacketNum_R;
 		public Transform PacketPos_Left;
 		public Transform PacketPos_Right;
+		public Transform Armor_HandPos;
+		public Transform Armor_HeadPos;
+		public Transform Armor_BodyPos;
+		public Transform Armor_LegPos;
+		public Transform Armor_FootPos;
 
-		// cinemachine
-		private float _cinemachineTargetYaw;
+	// cinemachine
+	private float _cinemachineTargetYaw;
 		private float _cinemachineTargetPitch;
 
 		// player
@@ -231,6 +238,17 @@ namespace StarterAssets
 
 		private void Awake()
 		{
+			
+			if (Instance == null)
+			{
+				Instance = this;
+				DontDestroyOnLoad(gameObject);
+			}
+			else
+			{
+				Destroy(gameObject);
+			}
+		
 			// get a reference to our main camera
 			if (_mainCamera == null)
 			{
@@ -241,8 +259,16 @@ namespace StarterAssets
 
 		private void Start()
 		{
+			
 			_playerBag_Left.PacketPos = PacketPos_Left;
 			_playerBag_Right.PacketPos = PacketPos_Right;
+			_playerBag_Left.HoldPos = LeftHandHoldPos;
+			_playerBag_Right.HoldPos = RightHandHoldPos;
+			_playerBag_Armor.FootPos = Armor_FootPos;
+			_playerBag_Armor.HandPos = Armor_HandPos;
+			_playerBag_Armor.HeadPos = Armor_HeadPos;
+			_playerBag_Armor.LegPos = Armor_LegPos;
+			_playerBag_Armor.BodyPos = Armor_BodyPos;
 			_hasAnimator = TryGetComponent(out _animator);
 			_controller = GetComponent<CharacterController>();
 			_input = GetComponent<StarterAssetsInputs>();
@@ -696,9 +722,16 @@ namespace StarterAssets
 					_holdItem_L = true;
 				}
 				else _holdItem_L = false;
+				//清除手的状态
                 _medicineHP_L = null;
                 _playerDamageRange_L = null;
 				PacketNum_L = newPacketNum_L;
+				//重新获取状态
+				if (_playerBag_Left.gameObjects[PacketNum_L] != null)
+                {
+					_playerDamageRange_L = _playerBag_Left.gameObjects[PacketNum_L].transform.TryGetComponent<PlayerDamageRange>(out PlayerDamageRange damageRange) ? damageRange : null;
+					_medicineHP_L = _playerBag_Left.gameObjects[PacketNum_L].transform.TryGetComponent<Medicine_HP>(out Medicine_HP medicine_HP) ? medicine_HP : null;
+				}
 				_playerBag_Left.PacketNum=PacketNum_L;
             }
             if (_input.itemToPacket_R)
@@ -723,7 +756,13 @@ namespace StarterAssets
 				_playerDamageRange_R = null;
 				//_holdItem_L = false;
 				PacketNum_R = newPacketNum_R;
-				_playerBag_Right.PacketNum = PacketNum_R;
+				//重新获取状态
+				if (_playerBag_Right.gameObjects[PacketNum_R] != null)
+				{
+					_playerDamageRange_R = _playerBag_Right.gameObjects[PacketNum_R].transform.TryGetComponent<PlayerDamageRange>(out PlayerDamageRange damageRange) ? damageRange : null;
+					_medicineHP_R = _playerBag_Right.gameObjects[PacketNum_R].transform.TryGetComponent<Medicine_HP>(out Medicine_HP medicine_HP) ? medicine_HP : null;
+				}
+                _playerBag_Right.PacketNum = PacketNum_R;
 			}
         }
 		#region Lifting
@@ -1365,6 +1404,10 @@ namespace StarterAssets
 			// if there is a move input rotate player when the player is moving
 			if (_input.move != Vector2.zero && !_input.climb)
 			{
+				if (_mainCamera == null)
+				{
+					_mainCamera = GameObject.FindGameObjectWithTag("MainCamera");
+				}
 				_targetRotation = Mathf.Atan2(inputDirection.x, inputDirection.z) * Mathf.Rad2Deg + _mainCamera.transform.eulerAngles.y;
 				float rotation = Mathf.SmoothDampAngle(transform.eulerAngles.y, _targetRotation, ref _rotationVelocity, RotationSmoothTime);
 				
@@ -1558,4 +1601,3 @@ namespace StarterAssets
 		}
 #endif
 	}
-}

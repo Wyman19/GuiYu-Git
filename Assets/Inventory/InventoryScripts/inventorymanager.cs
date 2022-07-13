@@ -10,6 +10,7 @@ public class inventorymanager : MonoBehaviour
     public Text itemInformantion;
     public List<slot> slots=new List<slot>();
 
+
     private void Awake()
     {
         GetSlot();
@@ -37,7 +38,7 @@ public class inventorymanager : MonoBehaviour
         //slots[PacketNum].slotNum.text = item.itemHeld.ToString();
     }
     /// <summary>
-    /// 刷新背包
+    /// 刷新背包，从ScriptableObject获取数据给slot
     /// </summary>
     public void RefreshItem()
     {
@@ -57,10 +58,14 @@ public class inventorymanager : MonoBehaviour
                 slots[i].slotGameObject = bag.gameObjects[i];
                 slots[i].slotCopyGameObject = bag.copyGameObjects[i];
                 slots[i].slotImage.sprite = bag.itemList[i].itemImage;
+                slots[i].transform.GetChild(0).gameObject.SetActive(true);
             }
         }
 
     }
+    /// <summary>
+    /// 刷新护甲装备栏，从ScriptableObject获取数据给slot
+    /// </summary>
     public void RefreshItemInArmor()
     {
         for (int i = 0; i < slots.Count; i++)
@@ -78,11 +83,12 @@ public class inventorymanager : MonoBehaviour
                 slots[i].slotGameObject = bag.gameObjects[i];
                 slots[i].slotCopyGameObject = bag.copyGameObjects[i];
                 slots[i].slotImage.sprite = bag.itemList[i].itemImage;
+                slots[i].transform.GetChild(0).gameObject.SetActive(true);
             }
         }
     }
     /// <summary>
-    /// 刷新左右手的装备
+    /// 刷新左右手的装备栏，从ScriptableObject获取数据给slot
     /// </summary>
     /// <param name="PacketNum"></param>
     public void RefreshItemInPacker()
@@ -109,30 +115,53 @@ public class inventorymanager : MonoBehaviour
 
 
     }
+    /// <summary>
+    /// 把slot的数据给ScriptableObject，并对卸下与装备的物品做相应的效果
+    /// </summary>
     public void SaveBag_Packet()
     {
+        Debug.Log(this.name + "_SaveBag_Packet");
         bag.PacketNum = 0; 
         for (int i=0; i < slots.Count; i++)
         {
+            //Debug.Log("SaceBag_Packet");
+            //跳过空的格子
+            //if (slots[i].slotItem == bag.itemList[i]) continue;
             //把数据放入inventory
             bag.gameObjects[i] = slots[i].slotGameObject;
             bag.itemList[i] = slots[i].slotItem;
             bag.copyGameObjects[i] = slots[i].slotCopyGameObject;
-            if (bag.gameObjects[i] != null)
+            if (slots[i].slotItem == null) continue;
+            bool value = true;
+            if (i == 0) value = true;
+            else value = false;
+            
+            if (bag.gameObjects[i] == null)
             {
-                bool value = true;
-                if (i==0) value = true;
-                else value = false;
-                //Destroy(bag.copyGameObjects[i]);
-                //bag.copyGameObjects[i] = Instantiate(bag.gameObjects[i], bag.PacketPos);
-                bag.gameObjects[i].SetActive(value);
-                if (bag.copyGameObjects[i] == null)
-                    bag.copyGameObjects[i] = Instantiate(bag.gameObjects[i], bag.PacketPos);
-                bag.copyGameObjects[i].SetActive(!value);
+                bag.gameObjects[i] = Instantiate(bag.itemList[i].itemPrefab, bag.HoldPos);
             }
+            Debug.Log(this.name + "_SaveBag_Packet");
+            bag.gameObjects[i].transform.SetParent(bag.HoldPos);
+            bag.gameObjects[i].transform.localPosition = new Vector3(0, 0, 0);
+            bag.gameObjects[i].transform.localRotation = Quaternion.identity;
+            bag.gameObjects[i].transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            bag.gameObjects[i].SetActive(value);
+
+            Destroy(bag.copyGameObjects[i]);
+            bag.copyGameObjects[i] = Instantiate(bag.gameObjects[i].gameObject, bag.PacketPos);
+            //设置object的位置
+            bag.copyGameObjects[i].transform.SetParent(bag.PacketPos);
+            bag.copyGameObjects[i].transform.localPosition = new Vector3(0, 0, 0);
+            bag.copyGameObjects[i].transform.localRotation = Quaternion.identity;
+            bag.copyGameObjects[i].transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            bag.copyGameObjects[i].SetActive(!value);
+
         }
         //bag.itemList[bag.PacketNum]=
     }
+    /// <summary>
+    /// 把slot的数据给ScriptableObject，并对卸下与装备的物品做相应的效果
+    /// </summary>
     public void SaveBag()
     {
         //把放到背包的物品隐藏
@@ -151,21 +180,50 @@ public class inventorymanager : MonoBehaviour
         
         //slots.ForEach(slot =>slot.slotGameObject?.SetActive(false));
     }
+    /// <summary>
+    /// 把slot的数据给ScriptableObject，并对卸下与装备的物品做相应的效果
+    /// </summary>
     public void SaveBag_Armor()
     {
         for (int i = 0; i < slots.Count; i++)
         {
-            //隐藏手的物品
-            if (slots[i].slotGameObject != null)
-                slots[i].slotGameObject.SetActive(false);
-            if (slots[i].slotCopyGameObject != null)
-                slots[i].slotCopyGameObject.SetActive(false);
-            //在身上显示装备
-
+            //Debug.Log("SaceBag_Packet");
+            //跳过空的格子
+            //if (slots[i].slotItem == bag.itemList[i]) continue;
             //把数据放入inventory
             bag.gameObjects[i] = slots[i].slotGameObject;
             bag.itemList[i] = slots[i].slotItem;
             bag.copyGameObjects[i] = slots[i].slotCopyGameObject;
+            if (slots[i].slotItem == null) continue;
+            
+
+            if (bag.gameObjects[i] == null)
+            {
+                bag.gameObjects[i] = Instantiate(bag.itemList[i].itemPrefab, SwichItemHoldPos(bag.itemList[i].armorType));
+            }
+
+            bag.gameObjects[i].transform.SetParent(SwichItemHoldPos(bag.itemList[i].armorType));
+            bag.gameObjects[i].transform.localPosition = new Vector3(0, 0, 0);
+            bag.gameObjects[i].transform.localRotation = Quaternion.identity;
+            bag.gameObjects[i].transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+            bag.gameObjects[i].SetActive(true);
+
+           
+
         }
+    }
+
+    public Transform SwichItemHoldPos(ArmorType armorType)
+    {
+        switch(armorType)
+        {
+            case ArmorType.Hand: return bag.HandPos;
+            case ArmorType.Head: return bag.HeadPos;
+            case ArmorType.Body: return bag.BodyPos;
+            case ArmorType.Leg: return bag.LegPos;
+            case ArmorType.Foot: return bag.FootPos;
+            default: return null;
+        }
+            
     }
 }

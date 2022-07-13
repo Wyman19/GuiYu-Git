@@ -49,6 +49,11 @@ public class PauseSetting : BasePanel
         UIManager.Instance.InitializePanelDict();
         //UIManager.Instance.PushPanel(UIPanelType.SystemSettingPanel);
     }
+
+    public void OnClickSaveButton()
+    {
+        UIManager.Instance.PushPanel(UIPanelType.SaveOrLoad);
+    }
     
     public void OnClickSettingButton()
     {

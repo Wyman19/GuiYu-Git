@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using UnityEditor;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -12,6 +13,7 @@ public class Item : ScriptableObject
     public Sprite itemImage;
     [TextArea]
     public string itemInfo;
+    public GameObject itemPrefab;
     public ArmorType armorType;
     
 

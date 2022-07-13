@@ -1,0 +1,21 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 9616ebcb7f7a1d44b9c2091cd5ed92e2, type: 3}
+  m_Name: King_Crown_01
+  m_EditorClassIdentifier: 
+  id: 0
+  itemName: 
+  itemImage: {fileID: 0}
+  itemInfo: 
+  itemPrefab: {fileID: 1194227020673489675, guid: 92fa7a73259a28b41ad2357010e84b29,
+    type: 3}
+  armorType: 1

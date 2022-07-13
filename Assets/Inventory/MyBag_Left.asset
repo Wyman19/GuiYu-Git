@@ -14,6 +14,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PacketNum: 0
   PacketPos: {fileID: 0}
+  HoldPos: {fileID: 0}
   itemList:
   - {fileID: 0}
   - {fileID: 0}

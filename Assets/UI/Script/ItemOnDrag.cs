@@ -6,15 +6,14 @@ using UnityEngine.UI;
 
 public class ItemOnDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragHandler
 {
-    public Transform origialParent;
-    public Vector3 originalPosition;
+    public Transform originalParent;
     public Image originalImage;
     public slot originalParentSlot;
 
     public void OnBeginDrag(PointerEventData eventData)
     {
-        origialParent = transform.parent;
-        originalPosition = transform.position;
+
+        originalParent = transform.parent;
         originalImage = GetComponent<Image>();
         originalParentSlot =transform.parent.GetComponent<slot>();
         Debug.Log(originalParentSlot.slotItem);
@@ -31,11 +30,17 @@ public class ItemOnDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragH
 
     public void OnEndDrag(PointerEventData eventData)
     {
-
-        if (eventData.pointerCurrentRaycast.gameObject.name == "Image")
+        GameObject targetObject = eventData.pointerCurrentRaycast.gameObject;
+        if (targetObject.name == "Image")
         {
-            eventData.pointerCurrentRaycast.gameObject.TryGetComponent<Image>(out Image targetImage);
-            eventData.pointerCurrentRaycast.gameObject.transform.parent.TryGetComponent<slot>(out slot targetslot);
+            targetObject.TryGetComponent<Image>(out Image targetImage);
+            targetObject.transform.parent.TryGetComponent<slot>(out slot targetslot);
+            //检测是否可以交换
+            if (targetslot.armorType != originalParentSlot.slotItem.armorType && originalParentSlot.slotItem.armorType == ArmorType.Other)
+            {
+                ReturnPosition();
+                return;
+            }
             //交换Slot
             originalParentSlot.SwitchSlot(targetslot);
             //交换Image
@@ -43,17 +48,28 @@ public class ItemOnDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragH
             originalImage.sprite = targetImage.sprite;
             targetImage.sprite = sprite;
             //松手Image返回原来位置
-            transform.SetParent(origialParent);
-            transform.position = originalPosition;
-            GetComponent<CanvasGroup>().blocksRaycasts = true;
+            ReturnPosition();
+            
             return;
 
         }
-        else if (eventData.pointerCurrentRaycast.gameObject.name == "slot")
+        else if (targetObject.name == "slot")
         {
-            GameObject targetImageGameObject = eventData.pointerCurrentRaycast.gameObject.transform.GetChild(0).gameObject;
+            
+            if (!targetObject.transform.Find("Image"))
+            {
+                ReturnPosition();
+                return;
+            }
+            GameObject targetImageGameObject = targetObject.transform.GetChild(0).gameObject;
             targetImageGameObject.TryGetComponent<Image>(out Image targetImage);
-            eventData.pointerCurrentRaycast.gameObject.TryGetComponent<slot>(out slot targetslot);
+            targetObject.TryGetComponent<slot>(out slot targetslot);
+            //检测是否可以交换
+            if (targetslot.armorType != originalParentSlot.slotItem.armorType&& originalParentSlot.slotItem.armorType==ArmorType.Other)
+            {
+                ReturnPosition();
+                return;
+            }
             //交换Slot
             originalParentSlot.SwitchSlot(targetslot);
             //交换Image
@@ -63,13 +79,17 @@ public class ItemOnDrag : MonoBehaviour,IBeginDragHandler,IDragHandler,IEndDragH
             targetImageGameObject.SetActive(true);
             transform.gameObject.SetActive(false);
             //松手Image返回原来位置
-            transform.SetParent(origialParent);
-            transform.position = originalPosition;
-            GetComponent<CanvasGroup>().blocksRaycasts = true;
+            ReturnPosition();
+            
             return;
         }
-        transform.SetParent(origialParent);
-        transform.position = originalPosition;
+        ReturnPosition();
+        
+    }
+    void ReturnPosition()
+    {
+        transform.SetParent(originalParent);
+        transform.position = originalParent.position;
         GetComponent<CanvasGroup>().blocksRaycasts = true;
     }
 

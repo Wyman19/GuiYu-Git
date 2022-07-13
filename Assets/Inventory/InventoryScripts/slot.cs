@@ -11,6 +11,7 @@ public class slot : MonoBehaviour
     public GameObject slotCopyGameObject;
     public Image slotImage;
     public Text slotNum;
+    public ArmorType armorType;
     /// <summary>
     /// Switches the slot,传入目标slot
     /// </summary>

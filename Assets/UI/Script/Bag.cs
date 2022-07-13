@@ -11,12 +11,15 @@ public class Bag : BasePanel
     public inventorymanager Packet_Right;
     public inventorymanager Packet_Armor;
     public inventorymanager MyBag;
+
     private void Start()
     {
         
         Packet_Left=transform.Find("Packet_Left").gameObject.GetComponent<inventorymanager>();
         Packet_Right=transform.Find("Packet_Right").gameObject.GetComponent<inventorymanager>();
+        Packet_Armor = transform.Find("Packet_Armor").gameObject.GetComponent<inventorymanager>();
         MyBag=transform.Find("Bag").gameObject.GetComponent<inventorymanager>();
+
         //Packet_Left.RefreshItemInPacker();
         //Packet_Right.RefreshItemInPacker();
 
@@ -32,6 +35,8 @@ public class Bag : BasePanel
         _isPause = true;
 
     }
+
+
     public override void OnExit()
     {
         base.OnExit();

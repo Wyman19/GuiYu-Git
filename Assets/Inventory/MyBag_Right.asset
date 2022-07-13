@@ -14,9 +14,15 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   PacketNum: 0
   PacketPos: {fileID: 0}
+  HoldPos: {fileID: 0}
+  HandPos: {fileID: 0}
+  HeadPos: {fileID: 0}
+  BodyPos: {fileID: 0}
+  LegPos: {fileID: 0}
+  FootPos: {fileID: 0}
   itemList:
   - {fileID: 11400000, guid: 05800e2516245aa4297312ebda5cb20a, type: 2}
-  - {fileID: 11400000, guid: 55deaeb83cd034547afca4f26607f98a, type: 2}
+  - {fileID: 0}
   gameObjects:
   - {fileID: 0}
   - {fileID: 0}

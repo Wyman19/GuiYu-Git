@@ -6,5 +6,7 @@
     PauseSetting,
     Setting,
     PlayerState,
-    Bag
+    Bag,
+    SaveOrLoad,
+    Load
 }

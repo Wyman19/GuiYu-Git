@@ -102,6 +102,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   originalParent: {fileID: 0}
+  originalImage: {fileID: 0}
+  originalParentSlot: {fileID: 0}
 --- !u!1 &8959988507949908384
 GameObject:
   m_ObjectHideFlags: 0
@@ -192,5 +194,8 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   slotItem: {fileID: 0}
+  slotGameObject: {fileID: 0}
+  slotCopyGameObject: {fileID: 0}
   slotImage: {fileID: 6656381832150085442}
   slotNum: {fileID: 0}
+  armorType: 2

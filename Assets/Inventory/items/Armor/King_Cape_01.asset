@@ -10,10 +10,12 @@ MonoBehaviour:
   m_Enabled: 1
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 9616ebcb7f7a1d44b9c2091cd5ed92e2, type: 3}
-  m_Name: Sword_07
+  m_Name: King_Cape_01
   m_EditorClassIdentifier: 
   id: 0
   itemName: 
-  itemHeld: 0
-  itemImage: {fileID: 21300000, guid: 9526457b4c7a6194d99f0961527961fe, type: 3}
-  itemInfo: jian
+  itemImage: {fileID: 0}
+  itemInfo: 
+  itemPrefab: {fileID: 2363146169669185477, guid: 25af0b0460a47e64686a45d43c28aa92,
+    type: 3}
+  armorType: 2

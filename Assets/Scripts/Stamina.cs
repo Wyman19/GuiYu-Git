@@ -3,8 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
-namespace StarterAssets
-{
+
     public class Stamina : MonoBehaviour
     {
         public float MaxStamina = 100;
@@ -82,4 +81,4 @@ namespace StarterAssets
             }
         }
     }
-}
+
