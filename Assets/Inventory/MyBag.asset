@@ -21,10 +21,7 @@ MonoBehaviour:
   LegPos: {fileID: 0}
   FootPos: {fileID: 0}
   itemList:
-  - {fileID: 11400000, guid: 1da1582a52a1ba242ab29de7e031d68c, type: 2}
   - {fileID: 11400000, guid: a63256266e4dd7942895f1f347e5a5a4, type: 2}
-  - {fileID: 11400000, guid: ec0a07866dc44c74c9adb5c9b79efd1d, type: 2}
-  - {fileID: 11400000, guid: 05800e2516245aa4297312ebda5cb20a, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
@@ -33,6 +30,9 @@ MonoBehaviour:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: 1da1582a52a1ba242ab29de7e031d68c, type: 2}
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}

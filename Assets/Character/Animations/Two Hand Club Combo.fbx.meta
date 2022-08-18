@@ -289,7 +289,7 @@ ModelImporter:
         floatParameter: 0
         intParameter: 0
         messageOptions: 0
-      - time: 0.44471657
+      - time: 0.43648612
         functionName: GiveDamageEnd
         data: 
         objectReferenceParameter: {instanceID: 0}

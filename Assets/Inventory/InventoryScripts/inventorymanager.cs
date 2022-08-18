@@ -121,7 +121,9 @@ public class inventorymanager : MonoBehaviour
     public void SaveBag_Packet()
     {
         Debug.Log(this.name + "_SaveBag_Packet");
-        bag.PacketNum = 0; 
+        bag.PacketNum = 0;
+        FSM.Instance.parameter.PacketNum_L = 0;
+        FSM.Instance.parameter.PacketNum_R = 0;
         for (int i=0; i < slots.Count; i++)
         {
             //Debug.Log("SaceBag_Packet");

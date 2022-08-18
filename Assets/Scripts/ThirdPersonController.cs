@@ -296,11 +296,11 @@ using UnityEngine.InputSystem;
 			TowHandIsNull();
 			ItemToPacket();
 			UserMedicine();
-			CheckAttackCombo();
-			Lifting();
+			//CheckAttackCombo();
+			//Lifting();
 			PickUpItem();
 			HandIk();
-			Push();
+			//Push();
 			Crouch();
 			Roll();
 			FootIk();
@@ -319,6 +319,7 @@ using UnityEngine.InputSystem;
 
 		private void AssignAnimationIDs()
 		{
+			
 			_animLayerIDHand = _animator.GetLayerIndex("Hand");
 			_animIDSpeed = Animator.StringToHash("Speed");
 			_animIDGrounded = Animator.StringToHash("Grounded");
@@ -468,37 +469,37 @@ using UnityEngine.InputSystem;
             }
         }
         #region Push
-        private void Push()
-        {
-			Vector3 LowRayPosition = new Vector3(transform.position.x, transform.position.y + ClimbGroundedOffset, transform.position.z);
-			if (_speed >= 1f) HavePushItem = Physics.Raycast(LowRayPosition, transform.forward, out _hitPushItem, PushDistance, PushLayers, QueryTriggerInteraction.Ignore);
-			else HavePushItem = false;
-			if (HavePushItem) 
-			{
+  //      private void Push()
+  //      {
+		//	Vector3 LowRayPosition = new Vector3(transform.position.x, transform.position.y + ClimbGroundedOffset, transform.position.z);
+		//	if (_speed >= 1f) HavePushItem = Physics.Raycast(LowRayPosition, transform.forward, out _hitPushItem, PushDistance, PushLayers, QueryTriggerInteraction.Ignore);
+		//	else HavePushItem = false;
+		//	if (HavePushItem) 
+		//	{
 				
-				_controller.radius = PushDistance-0.1f;
-				MoveSpeed = SprintSpeed = 1f;
-				_hitPushItem.rigidbody.velocity = transform.forward * 1f;
-				if(_speed>0.1f) _animator.SetBool(_animPush, true);
-				else
-                {
-					_animator.SetBool(_animPush, false);
-					MoveSpeed = 2f; SprintSpeed = 5.335f;
-				}
+		//		_controller.radius = PushDistance-0.1f;
+		//		MoveSpeed = SprintSpeed = 1f;
+		//		_hitPushItem.rigidbody.velocity = transform.forward * 1f;
+		//		if(_speed>0.1f) _animator.SetBool(_animPush, true);
+		//		else
+  //              {
+		//			_animator.SetBool(_animPush, false);
+		//			MoveSpeed = 2f; SprintSpeed = 5.335f;
+		//		}
                 
-			}
-			else
-            {
-				_animator.SetBool(_animPush, false);
-				_controller.radius = 0.28f;
+		//	}
+		//	else
+  //          {
+		//		_animator.SetBool(_animPush, false);
+		//		_controller.radius = 0.28f;
 
-			}
+		//	}
             
-		}
-		private void PushEnd()
-        {
-			MoveSpeed = 2f; SprintSpeed = 5.335f;
-		}
+		//}
+		//private void PushEnd()
+  //      {
+		//	MoveSpeed = 2f; SprintSpeed = 5.335f;
+		//}
         #endregion
         #region LookItem
         //放射线检测
@@ -627,80 +628,79 @@ using UnityEngine.InputSystem;
 			}
 			else _input.pickUpItem_L = false;
 		}
-		private void SetItemPos(string RightRoLeft)
-        {
-			bool ismedicine = false;
-			if (RightRoLeft == "Left")
-            {
-				_animator.SetBool(_animPick_L, false);
-				_hitItem.transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-				//激活伤害判定脚本
-				if (_hitItem.transform.TryGetComponent<PlayerDamageRange>(out PlayerDamageRange playerDamageRange))
-                {
-					playerDamageRange.userAnim = _animator;
-					_playerDamageRange_L = playerDamageRange;
-					//把物品放入左手小背包中
-					_playerBag_Left.itemList[PacketNum_L] = _playerDamageRange_L.thisItem; 
-				}else if(_hitItem.transform.TryGetComponent<Medicine_HP>(out Medicine_HP medicine_HP))
-                {
-					ismedicine = true;
-					medicine_HP.userHp = _hp;
-					_medicineHP_L = medicine_HP;	
-					//把物品放入左手小背包中
-					_playerBag_Left.itemList[PacketNum_L] = _medicineHP_L.thisItem;
-				}
-				//gameobject放入背包列表
-				_playerBag_Left.gameObjects[PacketNum_L] = _hitItem.transform.gameObject;
-				//copy一份放入跨包
-				_playerBag_Left.copyGameObjects[PacketNum_L] = Instantiate(_hitItem.transform.gameObject, PacketPos_Left);
-				_playerBag_Left.copyGameObjects[PacketNum_L].SetActive(false);
-				_playerBag_Left.copyGameObjects[PacketNum_L].transform.localPosition = new Vector3(0, 0, 0);
-				if(ismedicine) _playerBag_Left.copyGameObjects[PacketNum_L].transform.localRotation = new Quaternion(0, 0, 180, 0);
-				else _playerBag_Left.copyGameObjects[PacketNum_L].transform.localRotation = Quaternion.identity;
-				//拿到手上
-				_hitItem.transform.parent = LeftHandHoldPos;
-				//设置位置
-				_playerBag_Left.gameObjects[PacketNum_L].transform.localPosition = new Vector3(0, 0, 0);
-				_playerBag_Left.gameObjects[PacketNum_L].transform.localRotation = Quaternion.identity;
-			}else
-            {
-				_animator.SetBool(_animPick_R, false);
-				_hitItem.transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-				//激活伤害判定脚本
-				if (_hitItem.transform.TryGetComponent<PlayerDamageRange>(out PlayerDamageRange playerDamageRange))
-                {
-					playerDamageRange.userAnim = _animator;
-					_playerDamageRange_R = playerDamageRange;
-					//把物品放入右手小背包中
-					_playerBag_Right.itemList[PacketNum_R] =_playerDamageRange_R.thisItem;
-				}
-				else if (_hitItem.transform.TryGetComponent<Medicine_HP>(out Medicine_HP medicine_HP))
-				{
-					medicine_HP.userHp = _hp;
-					_medicineHP_R = medicine_HP;
-					//把物品放入右手小背包中
-					_playerBag_Right.itemList[PacketNum_R] =_medicineHP_R.thisItem;
-				}
-				_playerBag_Right.gameObjects[PacketNum_R] = _hitItem.transform.gameObject;
-				_playerBag_Right.copyGameObjects[PacketNum_R] = Instantiate(_hitItem.transform.gameObject, PacketPos_Right);
-				_playerBag_Right.copyGameObjects[PacketNum_R].SetActive(false);
-				_playerBag_Right.copyGameObjects[PacketNum_R].transform.localPosition = new Vector3(0, 0, 0);
-				_playerBag_Right.copyGameObjects[PacketNum_R].transform.localRotation = Quaternion.identity;
-				_hitItem.transform.parent = RightHandHoldPos;
-				_playerBag_Right.gameObjects[PacketNum_R].transform.localPosition = new Vector3(0, 0, 0);
-				_playerBag_Right.gameObjects[PacketNum_R].transform.localRotation = Quaternion.identity;
-			}
+		//private void SetItemPos(string RightRoLeft)
+  //      {
+		//	bool ismedicine = false;
+		//	if (RightRoLeft == "Left")
+  //          {
+		//		_animator.SetBool(_animPick_L, false);
+		//		_hitItem.transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+		//		//激活伤害判定脚本
+		//		if (_hitItem.transform.TryGetComponent<PlayerDamageRange>(out PlayerDamageRange playerDamageRange))
+  //              {
+		//			playerDamageRange.userAnim = _animator;
+		//			_playerDamageRange_L = playerDamageRange;
+		//			//把物品放入左手小背包中
+		//			_playerBag_Left.itemList[PacketNum_L] = _playerDamageRange_L.thisItem; 
+		//		}else if(_hitItem.transform.TryGetComponent<Medicine_HP>(out Medicine_HP medicine_HP))
+  //              {
+		//			ismedicine = true;
+		//			medicine_HP.userHp = _hp;
+		//			_medicineHP_L = medicine_HP;	
+		//			//把物品放入左手小背包中
+		//			_playerBag_Left.itemList[PacketNum_L] = _medicineHP_L.thisItem;
+		//		}
+		//		//gameobject放入背包列表
+		//		_playerBag_Left.gameObjects[PacketNum_L] = _hitItem.transform.gameObject;
+		//		//copy一份放入跨包
+		//		_playerBag_Left.copyGameObjects[PacketNum_L] = Instantiate(_hitItem.transform.gameObject, PacketPos_Left);
+		//		_playerBag_Left.copyGameObjects[PacketNum_L].SetActive(false);
+		//		_playerBag_Left.copyGameObjects[PacketNum_L].transform.localPosition = new Vector3(0, 0, 0);
+		//		if(ismedicine) _playerBag_Left.copyGameObjects[PacketNum_L].transform.localRotation = new Quaternion(0, 0, 180, 0);
+		//		else _playerBag_Left.copyGameObjects[PacketNum_L].transform.localRotation = Quaternion.identity;
+		//		//拿到手上
+		//		_hitItem.transform.parent = LeftHandHoldPos;
+		//		//设置位置
+		//		_playerBag_Left.gameObjects[PacketNum_L].transform.localPosition = new Vector3(0, 0, 0);
+		//		_playerBag_Left.gameObjects[PacketNum_L].transform.localRotation = Quaternion.identity;
+		//	}else
+  //          {
+		//		_animator.SetBool(_animPick_R, false);
+		//		_hitItem.transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+		//		//激活伤害判定脚本
+		//		if (_hitItem.transform.TryGetComponent<PlayerDamageRange>(out PlayerDamageRange playerDamageRange))
+  //              {
+		//			playerDamageRange.userAnim = _animator;
+		//			_playerDamageRange_R = playerDamageRange;
+		//			//把物品放入右手小背包中
+		//			_playerBag_Right.itemList[PacketNum_R] =_playerDamageRange_R.thisItem;
+		//		}
+		//		else if (_hitItem.transform.TryGetComponent<Medicine_HP>(out Medicine_HP medicine_HP))
+		//		{
+		//			medicine_HP.userHp = _hp;
+		//			_medicineHP_R = medicine_HP;
+		//			//把物品放入右手小背包中
+		//			_playerBag_Right.itemList[PacketNum_R] =_medicineHP_R.thisItem;
+		//		}
+		//		_playerBag_Right.gameObjects[PacketNum_R] = _hitItem.transform.gameObject;
+		//		_playerBag_Right.copyGameObjects[PacketNum_R] = Instantiate(_hitItem.transform.gameObject, PacketPos_Right);
+		//		_playerBag_Right.copyGameObjects[PacketNum_R].SetActive(false);
+		//		_playerBag_Right.copyGameObjects[PacketNum_R].transform.localPosition = new Vector3(0, 0, 0);
+		//		_playerBag_Right.copyGameObjects[PacketNum_R].transform.localRotation = Quaternion.identity;
+		//		_hitItem.transform.parent = RightHandHoldPos;
+		//		_playerBag_Right.gameObjects[PacketNum_R].transform.localPosition = new Vector3(0, 0, 0);
+		//		_playerBag_Right.gameObjects[PacketNum_R].transform.localRotation = Quaternion.identity;
+		//	}
 			
 
-		}
-		private void PickUpItemEnd()
-        {	
-			MoveSpeed = 2;
-			SprintSpeed = 5.335f;
-		}
+		//}
+		//private void PickUpItemEnd()
+  //      {	
+		//	MoveSpeed = 2;
+		//	SprintSpeed = 5.335f;
+		//}
 		#endregion
 
-		
 		public void ItemToPacket()
         {
 			//按下切换按钮
@@ -766,181 +766,181 @@ using UnityEngine.InputSystem;
 			}
         }
 		#region Lifting
-		private void Lifting()
-        {
-			if (_holdWeightItem) SprintSpeed = 2;
-			else SprintSpeed = 5.335f;
-			Look("Weight");
-			if (Look("Weight") &&_input.liftingItem&&!_holdWeightItem&& !Look("Item") &&!_holdItem_R&&!_holdItem_L)
-            {
-                transform.forward = new Vector3(_hitWeight.transform.position.x, transform.position.y, _hitWeight.transform.position.z) - transform.position;
-                _weightDis = Vector3.Distance(_hitWeight.point, _hitWeight.transform.position);
-				if (Vector3.Distance(transform.position, new Vector3(_hitWeight.transform.position.x, transform.position.y, _hitWeight.transform.position.z)) > _weightDis + 0.1f+_controller.radius)
-                {
-                    //Vector3 lerpTargetPos = Vector3.MoveTowards(transform.position, _hitItme.transform.position, 0.1f);
-                    //transform.position = lerpTargetPos;
-                    _speed = 0.5f;
-                    _animator.SetFloat(_animIDSpeed, 1f);
-                }
-                else
-                {
-                    //播动画
-                    _animator.SetBool(_animLifting, true);
-					_animator.SetBool(_animLiftingHold, true);
-					_holdWeightItem = true;
-					MoveSpeed = 0;
-					SprintSpeed = 0;
-					_input.liftingItem = false;
-				}
-			}
-			else if(_input.liftingItem && _holdWeightItem || _stamina.ResidueRtamina<=0 && _holdWeightItem)
-			{
-				_animator.SetLayerWeight(_animLayerIDHand, 0);
-				transform.GetChild(4).GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-				transform.GetChild(4).transform.parent = transform.parent;
-				_animator.SetBool(_animLiftingHold, false);
-				_holdWeightItem = false;
-				_stamina.BeginReplyToMaxStamina = true;
-			}
-			else _input.liftingItem = false;	
+		//private void Lifting()
+  //      {
+		//	if (_holdWeightItem) SprintSpeed = 2;
+		//	else SprintSpeed = 5.335f;
+		//	Look("Weight");
+		//	if (Look("Weight") &&_input.liftingItem&&!_holdWeightItem&& !Look("Item") &&!_holdItem_R&&!_holdItem_L)
+  //          {
+  //              transform.forward = new Vector3(_hitWeight.transform.position.x, transform.position.y, _hitWeight.transform.position.z) - transform.position;
+  //              _weightDis = Vector3.Distance(_hitWeight.point, _hitWeight.transform.position);
+		//		if (Vector3.Distance(transform.position, new Vector3(_hitWeight.transform.position.x, transform.position.y, _hitWeight.transform.position.z)) > _weightDis + 0.1f+_controller.radius)
+  //              {
+  //                  //Vector3 lerpTargetPos = Vector3.MoveTowards(transform.position, _hitItme.transform.position, 0.1f);
+  //                  //transform.position = lerpTargetPos;
+  //                  _speed = 0.5f;
+  //                  _animator.SetFloat(_animIDSpeed, 1f);
+  //              }
+  //              else
+  //              {
+  //                  //播动画
+  //                  _animator.SetBool(_animLifting, true);
+		//			_animator.SetBool(_animLiftingHold, true);
+		//			_holdWeightItem = true;
+		//			MoveSpeed = 0;
+		//			SprintSpeed = 0;
+		//			_input.liftingItem = false;
+		//		}
+		//	}
+		//	else if(_input.liftingItem && _holdWeightItem || _stamina.ResidueRtamina<=0 && _holdWeightItem)
+		//	{
+		//		_animator.SetLayerWeight(_animLayerIDHand, 0);
+		//		transform.GetChild(4).GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+		//		transform.GetChild(4).transform.parent = transform.parent;
+		//		_animator.SetBool(_animLiftingHold, false);
+		//		_holdWeightItem = false;
+		//		_stamina.BeginReplyToMaxStamina = true;
+		//	}
+		//	else _input.liftingItem = false;	
 			
-			if (_holdWeightItem)
-            {
-				_rightHandPush = Physics.Raycast(RightHand.position-transform.up*0.5f, transform.up , out _hitWeightItemRightHand, 1f, WeightItem , QueryTriggerInteraction.Ignore);
-				_leftHandPush = Physics.Raycast(LeftHand.position - transform.up * 0.5f, transform.up, out _hitWeightItemLeftHand, 1f, WeightItem, QueryTriggerInteraction.Ignore);
-			}
+		//	if (_holdWeightItem)
+  //          {
+		//		_rightHandPush = Physics.Raycast(RightHand.position-transform.up*0.5f, transform.up , out _hitWeightItemRightHand, 1f, WeightItem , QueryTriggerInteraction.Ignore);
+		//		_leftHandPush = Physics.Raycast(LeftHand.position - transform.up * 0.5f, transform.up, out _hitWeightItemLeftHand, 1f, WeightItem, QueryTriggerInteraction.Ignore);
+		//	}
 
-		}
-		//关键帧时让物体与ik重合
-		private void LiftingSetItemPos()
-		{
-			//var dis=Vector3.Distance(_hitItme.point,_hitItme.transform.position);
-			_animator.SetBool(_animLifting, false);
-            if (Look("Weight"))
-            {
-				_hitWeight.transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
-				_hitWeight.transform.parent = RightHandHoldPos;
-			}
-            else
-            {
-				_animator.SetBool(_animLiftingHold, false);
-				_holdWeightItem = false;
-				_stamina.BeginReplyToMaxStamina = true;
-			}
-			//_hitItme.transform.position = RightHandHoldPos.position + transform.forward*dis/2;
-			//_hitItme.transform.up = transform.up;
-			//s_hitItme.transform.Rotate(0, 60, 0);
+		//}
+		////关键帧时让物体与ik重合
+		//private void LiftingSetItemPos()
+		//{
+		//	//var dis=Vector3.Distance(_hitItme.point,_hitItme.transform.position);
+		//	_animator.SetBool(_animLifting, false);
+  //          if (Look("Weight"))
+  //          {
+		//		_hitWeight.transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.FreezeAll;
+		//		_hitWeight.transform.parent = RightHandHoldPos;
+		//	}
+  //          else
+  //          {
+		//		_animator.SetBool(_animLiftingHold, false);
+		//		_holdWeightItem = false;
+		//		_stamina.BeginReplyToMaxStamina = true;
+		//	}
+		//	//_hitItme.transform.position = RightHandHoldPos.position + transform.forward*dis/2;
+		//	//_hitItme.transform.up = transform.up;
+		//	//s_hitItme.transform.Rotate(0, 60, 0);
 
-		}
-		private void LiftingItemEnd()
-		{
-			_animator.SetLayerWeight(_animLayerIDHand, 1);
-			if(RightHandHoldPos.GetChild(1)!=null) RightHandHoldPos.GetChild(1).transform.parent = transform;
-            if (transform.GetChild(4) != null)
-            {
-				transform.GetChild(4).transform.up = transform.up;
-				transform.GetChild(4).transform.forward = transform.forward;
-				transform.GetChild(4).transform.position = transform.position + transform.up * 1.1f + transform.forward * (_weightDis+_controller.radius-0.125f);
-            }
-			MoveSpeed = 2;
-			SprintSpeed = 5.335f;
-		}
+		//}
+		//private void LiftingItemEnd()
+		//{
+		//	_animator.SetLayerWeight(_animLayerIDHand, 1);
+		//	if(RightHandHoldPos.GetChild(1)!=null) RightHandHoldPos.GetChild(1).transform.parent = transform;
+  //          if (transform.GetChild(4) != null)
+  //          {
+		//		transform.GetChild(4).transform.up = transform.up;
+		//		transform.GetChild(4).transform.forward = transform.forward;
+		//		transform.GetChild(4).transform.position = transform.position + transform.up * 1.1f + transform.forward * (_weightDis+_controller.radius-0.125f);
+  //          }
+		//	MoveSpeed = 2;
+		//	SprintSpeed = 5.335f;
+		//}
 		#endregion
 		#region Attack
-		public void TowardEnemy()
-        {
-			if (_lock.isLockOn && !_firstCombo && _lock.target!=null)
-            {
-				transform.forward = _lock.target.gameObject.transform.position - transform.position;
-            }
-        }
-		private void SwitchTwoHand()
-        {
-            if (_input.switchTwoHand && !_isTwoHand)
-            {
-				//如果两个手都有东西放下左手的东西
-				if(_holdItem_L && _holdItem_R)
-                {
-					LeftHandHoldPos.GetChild(0).transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
-					LeftHandHoldPos.GetChild(0).transform.parent = transform.parent;
-					_playerDamageRange_L = null;
-					_holdItem_L = false;
-				}
-				_animator.SetLayerWeight(_animLayerIDHand, 1);
-				_isTwoHand = true;
-                _animator.SetBool(_animTwoHand, true);
-                _input.switchTwoHand = false;
-            }
-            else if(_input.switchTwoHand && _isTwoHand)
-			{
-				_animator.SetLayerWeight(_animLayerIDHand, 0);
-				_isTwoHand = false;
-				_animator.SetBool(_animTwoHand, false);
-				_input.switchTwoHand = false;
-			}
-        }
-        private void AttackComboStart()
-        {
-			_isComboTime=true;
-			_stamina.AttackStamina();
-			_animator.SetBool(_animAttack, false);
-		}
-		private void CheckAttackCombo()
-        {
-            if (_playerDamageRange_R != null)
-            {
-				TowardEnemy();
-				SwitchTwoHand();
-				if (_isComboTime || _firstCombo)
-				{
-					Debug.Log("1");
-					if (_input.mouseRight && _stamina.ResidueRtamina >= 10)
-					{
-						Debug.Log("2");
-						_animator.SetLayerWeight(_animLayerIDHand, 0);
-						_animator.SetBool(_animAttack, true);
-						_firstCombo = false;
-						MoveSpeed = SprintSpeed = 0.01f;
-					}
+		//public void TowardEnemy()
+  //      {
+		//	if (_lock.isLockOn && !_firstCombo && _lock.target!=null)
+  //          {
+		//		transform.forward = _lock.target.gameObject.transform.position - transform.position;
+  //          }
+  //      }
+		//private void SwitchTwoHand()
+  //      {
+  //          if (_input.switchTwoHand && !_isTwoHand)
+  //          {
+		//		//如果两个手都有东西放下左手的东西
+		//		if(_holdItem_L && _holdItem_R)
+  //              {
+		//			LeftHandHoldPos.GetChild(0).transform.GetComponent<Rigidbody>().constraints = RigidbodyConstraints.None;
+		//			LeftHandHoldPos.GetChild(0).transform.parent = transform.parent;
+		//			_playerDamageRange_L = null;
+		//			_holdItem_L = false;
+		//		}
+		//		_animator.SetLayerWeight(_animLayerIDHand, 1);
+		//		_isTwoHand = true;
+  //              _animator.SetBool(_animTwoHand, true);
+  //              _input.switchTwoHand = false;
+  //          }
+  //          else if(_input.switchTwoHand && _isTwoHand)
+		//	{
+		//		_animator.SetLayerWeight(_animLayerIDHand, 0);
+		//		_isTwoHand = false;
+		//		_animator.SetBool(_animTwoHand, false);
+		//		_input.switchTwoHand = false;
+		//	}
+  //      }
+  //      private void AttackComboStart()
+  //      {
+		//	_isComboTime=true;
+		//	_stamina.AttackStamina();
+		//	_animator.SetBool(_animAttack, false);
+		//}
+		//private void CheckAttackCombo()
+  //      {
+  //          if (_playerDamageRange_R != null)
+  //          {
+		//		TowardEnemy();
+		//		SwitchTwoHand();
+		//		if (_isComboTime || _firstCombo)
+		//		{
+		//			Debug.Log("1");
+		//			if (_input.mouseRight && _stamina.ResidueRtamina >= 10)
+		//			{
+		//				Debug.Log("2");
+		//				_animator.SetLayerWeight(_animLayerIDHand, 0);
+		//				_animator.SetBool(_animAttack, true);
+		//				_firstCombo = false;
+		//				MoveSpeed = SprintSpeed = 0.01f;
+		//			}
 
-				}
-				else _input.mouseRight = false;
-            }else 
-            {
-				_input.switchTwoHand=false;
-			}
+		//		}
+		//		else _input.mouseRight = false;
+  //          }else 
+  //          {
+		//		_input.switchTwoHand=false;
+		//	}
 			
-        }
-		private void GiveDamageStart()
-        {
-			if(_playerDamageRange_R!=null)
-				_playerDamageRange_R.isGiveDamage = true;
-        }
-        private void GiveDamageEnd()
-        {
-			if (_playerDamageRange_R != null)
-				_playerDamageRange_R.isGiveDamage = false;
-		}
-        private void AttackComboEnd()
-        {
-			_isComboTime = false;
-            if (!_animator.GetBool(_animAttack))
-            {
-				_animator.SetLayerWeight(_animLayerIDHand, 1);
-				_firstCombo = true;
-				MoveSpeed = 2;
-				SprintSpeed = 5.335f;
-			}
-        }
-        private void AttackEnd()
-        {
-			_animator.SetLayerWeight(_animLayerIDHand, 1);
-			_stamina.AttackStamina();
-			_animator.SetBool(_animAttack, false);
-			_firstCombo = true;
-			MoveSpeed = 2;
-			SprintSpeed = 5.335f;
-		}
+  //      }
+		//private void GiveDamageStart()
+  //      {
+		//	if(_playerDamageRange_R!=null)
+		//		_playerDamageRange_R.isGiveDamage = true;
+  //      }
+  //      private void GiveDamageEnd()
+  //      {
+		//	if (_playerDamageRange_R != null)
+		//		_playerDamageRange_R.isGiveDamage = false;
+		//}
+  //      private void AttackComboEnd()
+  //      {
+		//	_isComboTime = false;
+  //          if (!_animator.GetBool(_animAttack))
+  //          {
+		//		_animator.SetLayerWeight(_animLayerIDHand, 1);
+		//		_firstCombo = true;
+		//		MoveSpeed = 2;
+		//		SprintSpeed = 5.335f;
+		//	}
+  //      }
+  //      private void AttackEnd()
+  //      {
+		//	_animator.SetLayerWeight(_animLayerIDHand, 1);
+		//	_stamina.AttackStamina();
+		//	_animator.SetBool(_animAttack, false);
+		//	_firstCombo = true;
+		//	MoveSpeed = 2;
+		//	SprintSpeed = 5.335f;
+		//}
 		#endregion
 		public void UserMedicine()
         {
@@ -981,8 +981,6 @@ using UnityEngine.InputSystem;
 			}
 			else if(_animator.GetFloat("RollTime")<1 && play_ing_flag) _animator.SetBool(_animRoll, false);
 			else _input.roll=false;
-
-
 		}
 		private void Crouch()
         {
@@ -1293,27 +1291,27 @@ using UnityEngine.InputSystem;
 		private void StepUpEvent()
         {
 			_verticalVelocity = Mathf.Sqrt((_hitStepHigh) * -2f * Gravity);
-			Debug.Log("台阶" + _verticalVelocity);
+			//Debug.Log("台阶" + _verticalVelocity);
 		}
 		private void ClimbHighWallEvent1()
         {
 			_verticalVelocity = Mathf.Sqrt((_hitWall.point.y + _hitWallHigh - 1.8f - transform.position.y -1f) * -2f * Gravity); 
-			Debug.Log("高墙1" + _verticalVelocity);
+			//Debug.Log("高墙1" + _verticalVelocity);
 		}
 		private void ClimbHighWallEvent2()
         {
 			_verticalVelocity = Mathf.Sqrt(1f * -2f * Gravity);
-			Debug.Log("高墙2" + _verticalVelocity);
+			//Debug.Log("高墙2" + _verticalVelocity);
 		}
 		private void ClimbMediumWallEvent()
         {
 			_verticalVelocity = Mathf.Sqrt((_hitWall.point.y + _hitWallHigh - 1.4f - transform.position.y) * -2f * Gravity); 
-			Debug.Log("中墙" + _verticalVelocity);
+			//Debug.Log("中墙" + _verticalVelocity);
 		}
 		private void ClimbLowWallEvent()
         {
 			_verticalVelocity = Mathf.Sqrt((_hitWall.point.y + _hitWallHigh - 0.9f - transform.position.y) * -2f * Gravity); 
-			Debug.Log("矮墙" + _verticalVelocity);
+			//Debug.Log("矮墙" + _verticalVelocity);
 		}
 #endregion
         private void GroundedCheck()

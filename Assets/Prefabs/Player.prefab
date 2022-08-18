@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 34766196}
-  m_Layer: 6
+  m_Layer: 13
   m_Name: Pos_L
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -114,7 +114,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 1490815115}
-  m_Layer: 6
+  m_Layer: 13
   m_Name: Pos_R
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -1145,10 +1145,12 @@ GameObject:
   - component: {fileID: 7845816676687864369}
   - component: {fileID: 5223227948116090962}
   - component: {fileID: 7845816676687864375}
+  - component: {fileID: 1659495052}
   - component: {fileID: 7845816676687864373}
   - component: {fileID: 7845816676687864374}
   - component: {fileID: 4577264946820053044}
   - component: {fileID: 7845816676687864368}
+  - component: {fileID: 1659495053}
   m_Layer: 15
   m_Name: Player
   m_TagString: Player
@@ -1241,7 +1243,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 7845870699789081550}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: 26e54e5a728a9234ab24fcf1460ed8a2, type: 3}
   m_Name: 
@@ -1299,16 +1301,166 @@ MonoBehaviour:
   LockCameraPosition: 0
   _playerBag_Left: {fileID: 11400000, guid: f3bc341452d38984594c3d889df04769, type: 2}
   _playerBag_Right: {fileID: 11400000, guid: 32ea44735e2032f42aaf83fe0c58e706, type: 2}
-  _playerBag_Armor: {fileID: 0}
+  _playerBag_Armor: {fileID: 11400000, guid: bfe2c204bf14576419a29852a44e1981, type: 2}
   PacketNum_L: 0
   PacketNum_R: 0
   PacketPos_Left: {fileID: 1151018386243637222}
   PacketPos_Right: {fileID: 5881551697076708064}
   Armor_HandPos: {fileID: 0}
-  Armor_HeadPos: {fileID: 0}
-  Armor_BodyPos: {fileID: 0}
+  Armor_HeadPos: {fileID: 322230210370230691}
+  Armor_BodyPos: {fileID: 571121648837558240}
   Armor_LegPos: {fileID: 0}
   Armor_FootPos: {fileID: 0}
+--- !u!114 &1659495052
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7845870699789081550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 92635f98026b87d4d8130459afef1548, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  parameter:
+    MoveSpeed: 2
+    SprintSpeed: 5.335
+    RotationSmoothTime: 0.12
+    SpeedChangeRate: 10
+    JumpHeight: 1.2
+    Gravity: -15
+    JumpTimeout: 0.5
+    FallTimeout: 0.15
+    Grounded: 1
+    GroundedOffset: -0.14
+    GroundedRadius: 0.28
+    GroundLayer:
+      serializedVersion: 2
+      m_Bits: 0
+    ClimbWallH: 0
+    ClimbHighWall: 2.4
+    ClimbMediumWall: 1.4
+    ClimbLowWall: 0.4
+    ClimbGroundedOffset: 0.2
+    WallDistance: 0.8
+    ClimbSpeed: 0.7
+    targetPos: {x: 0, y: 0, z: 0}
+    WallTopPos_Y: 0
+    HaveWall: 0
+    Wall:
+      serializedVersion: 2
+      m_Bits: 1
+    IsWallTop: 0
+    pos: {x: 0, y: 0, z: 0}
+    LeftFoot: {fileID: 7850253356080992814}
+    RightFoot: {fileID: 7849406304969056306}
+    LeftHand: {fileID: 7849406692919128414}
+    RightHand: {fileID: 7849516228561722092}
+    RightHandHoldPos: {fileID: 1490815115}
+    LeftHandHoldPos: {fileID: 34766196}
+    TowHand_Right: {fileID: 7845816676690492293}
+    TowHand_Left: {fileID: 7845816677375774779}
+    Neck: {fileID: 7849262867726850004}
+    PushLayers:
+      serializedVersion: 2
+      m_Bits: 134217728
+    PushDistance: 0.7
+    HavePushItem: 0
+    Range: 0
+    WeightItem:
+      serializedVersion: 2
+      m_Bits: 4096
+    CinemachineCameraTarget: {fileID: 7845816677011007643}
+    TopClamp: 70
+    BottomClamp: -30
+    CameraAngleOverride: 0
+    LockCameraPosition: 0
+    _playerBag_Left: {fileID: 11400000, guid: f3bc341452d38984594c3d889df04769, type: 2}
+    _playerBag_Right: {fileID: 11400000, guid: 32ea44735e2032f42aaf83fe0c58e706, type: 2}
+    _playerBag_Armor: {fileID: 11400000, guid: bfe2c204bf14576419a29852a44e1981, type: 2}
+    PacketNum_L: 0
+    PacketNum_R: 0
+    PacketPos_Left: {fileID: 1151018386243637222}
+    PacketPos_Right: {fileID: 5881551697076708064}
+    Armor_HandPos: {fileID: 0}
+    Armor_HeadPos: {fileID: 322230210370230691}
+    Armor_BodyPos: {fileID: 571121648837558240}
+    Armor_LegPos: {fileID: 0}
+    Armor_FootPos: {fileID: 0}
+    _cinemachineTargetYaw: 0
+    _cinemachineTargetPitch: 0
+    _speed: 0
+    _animationBlend: 0
+    _targetRotation: 0
+    _rotationVelocity: 0
+    _verticalVelocity: 0
+    _terminalVelocity: 53
+    _climbAcceleratedSpeed_X: 0
+    _climbAcceleratedSpeed_Y: 0
+    _leftHandWallToLand: 0
+    _rightHandWallToLand: 0
+    _leftBoxCheckWall: 0
+    _rightBoxCheckWall: 0
+    _hitWallHigh: 0
+    _hitStepHigh: 0
+    _moveWallTop: 0
+    _haveStep: 0
+    _boxContactStep: 0
+    _boxContactWall: 0
+    _leftFootRay: 0
+    _rightFootRay: 0
+    _rightHandPush: 0
+    _leftHandPush: 0
+    _holdItem_R: 0
+    _holdItem_L: 0
+    _holdWeightItem: 0
+    _weightDis: 0
+    _isComboTime: 0
+    _firstCombo: 0
+    _isTwoHand: 0
+    _iscrouch: 0
+    _controllerCenter: {x: 0, y: 0, z: 0}
+    _footIkOffset: 0
+    _jumpTimeoutDelta: 0
+    _fallTimeoutDelta: 0
+    _animLayerIDHand: 0
+    _animatorIDIdle: 0
+    _animIDSpeed: 0
+    _animIDGrounded: 0
+    _animIDJump: 0
+    _animIDFreeFall: 0
+    _animIDMotionSpeed: 0
+    _animIDClimbingIdleWall: 0
+    _animIDClimbingHorizontalWall: 0
+    _animIDClimbingVerticalWall: 0
+    _animIDClimbingToWall: 0
+    _animIDClimbLowWall: 0
+    _animIDClimbMediumWall: 0
+    _animIDClimbHighWall: 0
+    _animStepUp: 0
+    _animRoll: 0
+    _animCrouch: 0
+    _animPush: 0
+    _animPick_R: 0
+    _animPick_L: 0
+    _animLifting: 0
+    _animLiftingHold: 0
+    _animAttack: 0
+    _animTwoHand: 0
+    _playerInput: {fileID: 0}
+    _animator: {fileID: 0}
+    _controller: {fileID: 0}
+    _input: {fileID: 0}
+    _mainCamera: {fileID: 0}
+    _stamina: {fileID: 0}
+    _playerDamageRange_R: {fileID: 0}
+    _playerDamageRange_L: {fileID: 0}
+    _medicineHP_R: {fileID: 0}
+    _medicineHP_L: {fileID: 0}
+    _lock: {fileID: 0}
+    _hp: {fileID: 0}
+    _hasAnimator: 0
 --- !u!114 &7845816676687864373
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1479,6 +1631,24 @@ MonoBehaviour:
   m_DefaultActionMap: Player
   m_SplitScreenIndex: -1
   m_Camera: {fileID: 0}
+--- !u!114 &1659495053
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7845870699789081550}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 946f0b59bab08874584fc8bd9ed98eeb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  hp: {fileID: 0}
+  damageUI: {fileID: 0}
+  statusBar: {x: 0, y: 0, z: 0}
+  MaxHp: 100
+  ResidueHp: 100
+  time: 0
 --- !u!1 &7845884772007113016
 GameObject:
   m_ObjectHideFlags: 0
